@@ -1,0 +1,10 @@
+input.laneName {
+  font-weight: 700;
+  &:disabled {
+    color: black;
+    cursor: default;
+  }
+}
+input.laneName.editActive {
+  font-weight: normal;
+}
