@@ -1,3 +1,5 @@
+import "simplebar-react/dist/simplebar.min.css";
+
 import "./index.scss";
 
 import React from "react";

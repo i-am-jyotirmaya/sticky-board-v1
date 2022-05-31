@@ -4,39 +4,47 @@ import Placeholder from "@tiptap/extension-placeholder";
 import { EditorContent, useEditor } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
 import { Card } from "antd";
+import { useContext } from "react";
+import * as Y from "yjs";
 
+import { BoardContext } from "../../contexts/BoardContext";
 import * as styles from "./Note.module.scss";
 
 // import { prop, provider, ydoc } from "../../store";
 
-export interface INoteProps {
-  id: string;
-  title: string;
-  content: string;
+export interface INoteOptions {
+  bodyFragment: Y.XmlFragment;
 }
 
-const Note: React.FC<INoteProps> = ({ id, title, content }): JSX.Element => {
+export interface INoteProps {
+  title: string;
+  options: INoteOptions;
+}
+
+const Note: React.FC<INoteProps> = ({ options, title }): JSX.Element => {
+  const { provider } = useContext(BoardContext);
+
   const editor = useEditor({
     extensions: [
       StarterKit.configure({
         history: false,
       }),
-      // Collaboration.configure({
-      //   document: ydoc,
-      //   field: id,
-      // }),
-      // CollaborationCursor.configure({
-      //   provider,
-      //   user: {
-      //     name: prop.username,
-      //     color: prop.color,
-      //   },
-      // }),
+      Collaboration.configure({
+        // document: ydoc,
+        // field: id,
+        fragment: options.bodyFragment,
+      }),
+      CollaborationCursor.configure({
+        provider,
+        user: {
+          name: "user",
+          color: "#958DF1",
+        },
+      }),
       Placeholder.configure({
         placeholder: "Write something...",
       }),
     ],
-    content,
   });
 
   return (

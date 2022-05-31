@@ -1,11 +1,14 @@
 import { CheckOutlined, EditOutlined } from "@ant-design/icons";
 import { Button, Input, Tooltip } from "antd";
 import classNames from "classnames";
+import React from "react";
 import { useState } from "react";
 
 import styles from "./SectionHeader.module.scss";
 
-export const SectionHeader = () => {
+type SectionHeaderProps = React.HTMLAttributes<HTMLDivElement> & React.ClassAttributes<HTMLDivElement>;
+
+export const SectionHeader = React.forwardRef<HTMLDivElement, SectionHeaderProps>((props, ref) => {
   const [isEditMode, setEditMode] = useState(false);
   const [laneName, setLaneName] = useState("");
   const [isNameSubmitting, setNameSubmitting] = useState(false);
@@ -28,10 +31,11 @@ export const SectionHeader = () => {
     }, 1000);
   };
 
+  const rootClasses = classNames(props.className, "bg-white rounded-lg shadow-md p-1");
   const classes = classNames("flex-1", styles.laneName, { [styles.editActive]: isEditMode });
 
   return (
-    <div className="bg-white rounded-lg shadow-md p-1">
+    <div {...props} ref={ref} className={rootClasses}>
       <div className="flex">
         <Input
           className={classes}
@@ -57,4 +61,4 @@ export const SectionHeader = () => {
       </div>
     </div>
   );
-};
+});
