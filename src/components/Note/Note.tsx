@@ -1,33 +1,42 @@
 import Collaboration from "@tiptap/extension-collaboration";
 import CollaborationCursor from "@tiptap/extension-collaboration-cursor";
+import Placeholder from "@tiptap/extension-placeholder";
 import { EditorContent, useEditor } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
 import { Card } from "antd";
 
-import { prop, provider, ydoc } from "../../store";
 import * as styles from "./Note.module.scss";
 
+// import { prop, provider, ydoc } from "../../store";
+
 export interface INoteProps {
+  id: string;
   title: string;
+  content: string;
 }
 
-const Note: React.FC<INoteProps> = ({ title }): JSX.Element => {
+const Note: React.FC<INoteProps> = ({ id, title, content }): JSX.Element => {
   const editor = useEditor({
     extensions: [
       StarterKit.configure({
         history: false,
       }),
-      Collaboration.configure({
-        document: ydoc,
-      }),
-      CollaborationCursor.configure({
-        provider,
-        user: {
-          name: prop.username,
-          color: prop.color,
-        },
+      // Collaboration.configure({
+      //   document: ydoc,
+      //   field: id,
+      // }),
+      // CollaborationCursor.configure({
+      //   provider,
+      //   user: {
+      //     name: prop.username,
+      //     color: prop.color,
+      //   },
+      // }),
+      Placeholder.configure({
+        placeholder: "Write something...",
       }),
     ],
+    content,
   });
 
   return (

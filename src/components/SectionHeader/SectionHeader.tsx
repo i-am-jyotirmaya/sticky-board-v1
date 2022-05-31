@@ -3,11 +3,12 @@ import { Button, Input, Tooltip } from "antd";
 import classNames from "classnames";
 import { useState } from "react";
 
-import styles from "./LaneHeader.module.scss";
+import styles from "./SectionHeader.module.scss";
 
-const LaneHeader = () => {
+export const SectionHeader = () => {
   const [isEditMode, setEditMode] = useState(false);
   const [laneName, setLaneName] = useState("");
+  const [isNameSubmitting, setNameSubmitting] = useState(false);
 
   const handleLaneNameOnChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setLaneName(e.target.value);
@@ -18,7 +19,13 @@ const LaneHeader = () => {
   };
 
   const handleSaveNameButtonClick = () => {
-    setEditMode(false);
+    setNameSubmitting(true);
+    // Save name
+    // Using timeout to emulate real behaviour
+    setTimeout(() => {
+      setEditMode(false);
+      setNameSubmitting(false);
+    }, 1000);
   };
 
   const classes = classNames("flex-1", styles.laneName, { [styles.editActive]: isEditMode });
@@ -35,7 +42,12 @@ const LaneHeader = () => {
         />
         {isEditMode ? (
           <Tooltip title="">
-            <Button type="text" icon={<CheckOutlined />} onClick={handleSaveNameButtonClick} />
+            <Button
+              type="text"
+              loading={isNameSubmitting}
+              icon={<CheckOutlined />}
+              onClick={handleSaveNameButtonClick}
+            />
           </Tooltip>
         ) : (
           <Tooltip title="Edit Lane name">
@@ -46,5 +58,3 @@ const LaneHeader = () => {
     </div>
   );
 };
-
-export default LaneHeader;

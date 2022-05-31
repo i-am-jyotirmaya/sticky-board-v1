@@ -1,4 +1,8 @@
-import Lane from "./Lane/Lane";
+import { useEffect } from "react";
+
+import { useCollaborativeBoard } from "../store";
+import Board from "./Board/Board";
+import { Section } from "./Section/Section";
 
 const Play = () => {
   return (
@@ -8,7 +12,7 @@ const Play = () => {
         padding: "1rem",
       }}
     >
-      <Lane />
+      <Board />
     </div>
   );
 };
