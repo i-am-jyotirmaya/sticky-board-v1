@@ -38,9 +38,7 @@ export const Section: React.FC<ISectionProps> = ({ sectionData }) => {
   const prepareNotesJsx = () => {
     return sectionData
       .toArray()
-      .map((note, index) => (
-        <Note key={index} options={{ bodyFragment: note.get("content") }} title={note.get("title")} />
-      ));
+      .map((note, index) => <Note options={{ bodyFragment: note.get("content") }} title={note.get("title")} />);
   };
 
   return (
