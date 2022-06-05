@@ -2,6 +2,7 @@ import "./Section.scss";
 
 import { PlusCircleFilled, YahooFilled } from "@ant-design/icons";
 import { Col, Row } from "antd";
+import { nanoid } from "nanoid";
 import { useContext, useEffect, useRef, useState } from "react";
 import SimpleBar from "simplebar-react";
 import * as Y from "yjs";
@@ -36,9 +37,17 @@ export const Section: React.FC<ISectionProps> = ({ sectionData }) => {
   }, [addNoteButtonRef.current]);
 
   const prepareNotesJsx = () => {
-    return sectionData
-      .toArray()
-      .map((note, index) => <Note options={{ bodyFragment: note.get("content") }} title={note.get("title")} />);
+    return sectionData.toArray().map((doc, index) => <Note key={index} options={{ doc }} title={`Note${index}`} />);
+  };
+
+  const handleAddNoteButton = () => {
+    const id = nanoid();
+    console.log("nid", id);
+    const doc = new Y.Doc({ autoLoad: true, guid: id });
+    const note = doc.getMap("rootMap");
+    note.set("title", "Note");
+    note.set("content", new Y.XmlFragment());
+    sectionData.push([doc]);
   };
 
   return (
@@ -48,11 +57,8 @@ export const Section: React.FC<ISectionProps> = ({ sectionData }) => {
       <div className="flex flex-col flex-grow mt-4" style={{ maxHeight }}>
         <DashedButton
           ref={addNoteButtonRef}
-          onClick={(e) => {
-            const note = new Y.Map();
-            note.set("title", "Note");
-            note.set("content", new Y.XmlFragment());
-            sectionData.insert(0, [note]);
+          onClick={() => {
+            handleAddNoteButton();
           }}
         >
           <PlusCircleFilled />

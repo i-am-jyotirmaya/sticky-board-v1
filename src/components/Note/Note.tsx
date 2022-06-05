@@ -1,19 +1,15 @@
-import Collaboration from "@tiptap/extension-collaboration";
-import CollaborationCursor from "@tiptap/extension-collaboration-cursor";
-import Placeholder from "@tiptap/extension-placeholder";
-import { EditorContent, useEditor } from "@tiptap/react";
-import StarterKit from "@tiptap/starter-kit";
 import { Card } from "antd";
-import { useContext } from "react";
+import { useEffect, useRef, useState } from "react";
+import { WebrtcProvider } from "y-webrtc";
 import * as Y from "yjs";
 
-import { BoardContext } from "../../contexts/BoardContext";
+import NoteEditor from "../NoteEditor/NoteEditor";
 import * as styles from "./Note.module.scss";
 
 // import { prop, provider, ydoc } from "../../store";
 
 export interface INoteOptions {
-  bodyFragment: Y.XmlFragment;
+  doc: Y.Doc;
 }
 
 export interface INoteProps {
@@ -22,34 +18,33 @@ export interface INoteProps {
 }
 
 const Note: React.FC<INoteProps> = ({ options, title }): JSX.Element => {
-  const { provider } = useContext(BoardContext);
+  const [fragment, setFragment] = useState<Y.XmlFragment>();
 
-  const editor = useEditor({
-    extensions: [
-      StarterKit.configure({
-        history: false,
-      }),
-      Collaboration.configure({
-        // document: ydoc,
-        // field: id,
-        fragment: options.bodyFragment,
-      }),
-      CollaborationCursor.configure({
-        provider,
-        user: {
-          name: "user",
-          color: "#958DF1",
-        },
-      }),
-      Placeholder.configure({
-        placeholder: "Write something...",
-      }),
-    ],
-  });
+  const providerRef = useRef<WebrtcProvider>();
+
+  useEffect(() => {
+    if (!providerRef.current) providerRef.current = new WebrtcProvider(options.doc.guid, options.doc);
+    console.log(options.doc.guid);
+    const map = options.doc.getMap("rootMap");
+
+    const observeCallback = () => {
+      const frag = map.get("content") as Y.XmlFragment;
+      console.log("obs");
+      setFragment(frag);
+    };
+
+    if (map.get("content")) setFragment(map.get("content") as Y.XmlFragment);
+
+    map.observe(observeCallback);
+
+    return () => {
+      observeCallback && map.unobserve(observeCallback);
+    };
+  }, []);
 
   return (
     <Card title={title}>
-      <EditorContent editor={editor} />
+      {providerRef.current && fragment && <NoteEditor fragment={fragment} provider={providerRef.current} />}
     </Card>
   );
 };
