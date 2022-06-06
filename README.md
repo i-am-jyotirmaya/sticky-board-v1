@@ -1,46 +1,30 @@
-# Getting Started with Create React App
+# Sticky Board
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+### Version
 
-## Available Scripts
+Alpha
 
-In the project directory, you can run:
+### About
 
-### `npm start`
+**Sticky Board** is an online live collaborative discussion board (or retrospective board). This board can be used for many other purposes other than those mentioned above.
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+### How to use
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+The basic entities of **Sticky Board** are:
+Board, Section & Note
 
-### `npm test`
+**Board** is the most basic and the root entity that holds everything. Atleast one board is required to use the app. Each board has its own URL (or room name) and name. Board can have duplicate names (not room name).
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+**Section** holds Notes and is used to categorize notes on any basis. A section can be seen as a single column of notes.
 
-### `npm run build`
+**Note** is an editable entity that holds our content. We can add multiple notes to a section. Each Note is unique and no two notes are shared in a board. A Note can have its name which can be edited by user and the action is shared by all users connected to the board.
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+_(Steps to be added here.)_
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+### Technologies used
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+1. React.js
 
-### `npm run eject`
+### Contributors
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
-
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
+1. Jyotirmaya Sahu
