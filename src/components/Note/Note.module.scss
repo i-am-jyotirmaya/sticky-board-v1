@@ -1,2 +1,12 @@
 
 
+input.noteTitle {
+  font-weight: 500;
+  &:disabled {
+    color: black;
+    cursor: default;
+  }
+}
+input.noteTitle.editActive {
+  font-weight: normal;
+}

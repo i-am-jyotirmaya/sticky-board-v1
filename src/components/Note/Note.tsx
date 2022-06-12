@@ -1,9 +1,10 @@
-import { Card, Input } from "antd";
+import { Card } from "antd";
 import { useEffect, useRef, useState } from "react";
 import * as Y from "yjs";
 
 import NoteEditor from "../NoteEditor/NoteEditor";
 import * as styles from "./Note.module.scss";
+import NoteTitle from "./NoteTitle";
 
 export interface INoteOptions {
   map: Y.Map<any>;
@@ -60,30 +61,14 @@ const Note: React.FC<INoteProps> = ({ options }): JSX.Element => {
     //   observeCallback && map?.unobserveDeep(observeCallback);
     // };
 
-    titleTextRef.current.observe((ev, tr) => {
-      setName(titleTextRef.current?.toString() ?? "");
-    });
+    // titleTextRef.current.observe((ev, tr) => {
+    //   setName(titleTextRef.current?.toString() ?? "");
+    // });
   }, []);
 
   // console.log(providerRef.current, fragment);
   return (
-    <Card
-      title={
-        <>
-          <Input
-            // className={classes}
-            value={name}
-            onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-              titleTextRef.current?.delete(0, titleTextRef.current.length);
-              titleTextRef.current?.insert(0, e.target.value);
-              // setName(e.target.value);
-            }}
-            // disabled={!isEditMode}
-            bordered={false}
-          />
-        </>
-      }
-    >
+    <Card title={titleTextRef.current && <NoteTitle text={titleTextRef.current} />}>
       {fragmentRef.current && <NoteEditor fragment={fragmentRef.current} />}
     </Card>
   );
