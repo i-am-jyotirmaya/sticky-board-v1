@@ -1,14 +1,11 @@
 import "./Section.scss";
 
-import { PlusCircleFilled, YahooFilled } from "@ant-design/icons";
-import { Col, Row } from "antd";
-import { nanoid } from "nanoid";
-import { useContext, useEffect, useRef, useState } from "react";
+import { PlusCircleFilled } from "@ant-design/icons";
+import { useEffect, useRef, useState } from "react";
 import SimpleBar from "simplebar-react";
 import * as Y from "yjs";
 
-import { BoardContext } from "../../contexts/BoardContext";
-import { SectionData } from "../../store";
+import { NoteData, SectionData } from "../../store";
 import { DashedButton } from "../Button/DashedButton";
 import Note from "../Note/Note";
 import { SectionHeader } from "../SectionHeader/SectionHeader";
@@ -18,6 +15,8 @@ interface ISectionProps {
 }
 
 export const Section: React.FC<ISectionProps> = ({ sectionData }) => {
+  const [name, setName] = useState("");
+
   const sectionHeaderRef = useRef<HTMLDivElement>(null);
   const addNoteButtonRef = useRef<HTMLDivElement>(null);
 
@@ -25,35 +24,42 @@ export const Section: React.FC<ISectionProps> = ({ sectionData }) => {
   const [noteListMaxHeight, setNoteListMaxHeight] = useState("");
 
   useEffect(() => {
-    console.log(sectionHeaderRef.current?.clientHeight);
+    // console.log(sectionHeaderRef.current?.clientHeight);
     setMaxheight(`calc(100% - ${sectionHeaderRef.current?.clientHeight ?? 0}px - 16px)`);
-    console.log(maxHeight);
+    // console.log(maxHeight);
   }, [sectionHeaderRef.current]);
 
   useEffect(() => {
-    console.log(addNoteButtonRef.current?.clientHeight);
+    // console.log(addNoteButtonRef.current?.clientHeight);
     setNoteListMaxHeight(`calc(100% - ${addNoteButtonRef.current?.clientHeight ?? 0}px - 16px)`);
-    console.log(maxHeight);
+    // console.log(maxHeight);
   }, [addNoteButtonRef.current]);
 
+  const sectionMapRef = useRef<SectionData>();
+  const notesArrRef = useRef<Y.Array<NoteData>>();
+  const sectionNameRef = useRef<Y.Text>();
+
+  useEffect(() => {
+    if (!sectionMapRef.current) sectionMapRef.current = sectionData;
+    if (!notesArrRef.current) notesArrRef.current = sectionData.get("notes");
+    if (!sectionNameRef.current) sectionNameRef.current = sectionData.get("name");
+    setName(sectionNameRef.current?.toString() ?? "");
+  }, []);
+
   const prepareNotesJsx = () => {
-    return sectionData.toArray().map((map, index) => <Note key={index} options={{ map }} />);
+    return notesArrRef.current?.toArray().map((map, index) => <Note key={index} options={{ map }} />);
   };
 
   const handleAddNoteButton = () => {
-    // const id = nanoid();
-    // console.log("nid", id);
-    // const doc = new Y.Doc({ autoLoad: true, guid: id });
-    // const note = doc.getMap("rootMap");
     const note = new Y.Map();
     note.set("title", new Y.Text("New Note"));
     note.set("content", new Y.XmlFragment());
-    sectionData.push([note]);
+    notesArrRef.current!.push([note]);
   };
 
   return (
     <div className="bg-slate-300 max-w-sm rounded-lg p-2 flex flex-col max-h-full" style={{ minWidth: "20rem" }}>
-      <SectionHeader ref={sectionHeaderRef} />
+      {sectionNameRef.current && <SectionHeader ref={sectionHeaderRef} text={sectionNameRef.current} />}
 
       <div className="flex flex-col flex-grow mt-4" style={{ maxHeight }}>
         <DashedButton

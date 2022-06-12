@@ -2,12 +2,13 @@ import { Card } from "antd";
 import { useEffect, useRef, useState } from "react";
 import * as Y from "yjs";
 
+import { NoteData } from "../../store";
 import NoteEditor from "../NoteEditor/NoteEditor";
 import * as styles from "./Note.module.scss";
 import NoteTitle from "./NoteTitle";
 
 export interface INoteOptions {
-  map: Y.Map<any>;
+  map: NoteData;
 }
 
 export interface INoteProps {
@@ -15,12 +16,12 @@ export interface INoteProps {
 }
 
 const Note: React.FC<INoteProps> = ({ options }): JSX.Element => {
-  console.group("Loading component Note");
+  // console.group("Loading component Note");
 
   // const [fragment, setFragment] = useState<Y.XmlFragment>();
   const [name, setName] = useState("");
 
-  const rootMapRef = useRef<Y.Map<any>>();
+  const rootMapRef = useRef<NoteData>();
   const fragmentRef = useRef<Y.XmlFragment>();
   const titleTextRef = useRef<Y.Text>();
 
@@ -39,7 +40,7 @@ const Note: React.FC<INoteProps> = ({ options }): JSX.Element => {
   // }, []);
 
   useEffect(() => {
-    console.log("Running Effect");
+    // console.log("Running Effect");
     if (!rootMapRef.current) rootMapRef.current = options.map;
     if (!fragmentRef.current) fragmentRef.current = rootMapRef.current.get("content") as Y.XmlFragment;
     if (!titleTextRef.current) titleTextRef.current = rootMapRef.current.get("title") as Y.Text;

@@ -5,7 +5,7 @@ import SimpleBar from "simplebar-react";
 import * as Y from "yjs";
 
 import { BoardContext } from "../../contexts/BoardContext";
-import { SectionData, useCollaborativeBoard } from "../../store";
+import { NoteData, SectionData, useCollaborativeBoard } from "../../store";
 import { DashedButton } from "../Button/DashedButton";
 import { Section } from "../Section/Section";
 
@@ -22,9 +22,10 @@ const Board = () => {
         <div className="max-w-full flex gap-2 flex-grow board-content">
           <DashedButton
             onClick={() => {
-              const newSection: SectionData = new Y.Array<any>();
-              console.log(newSection);
-              board.insert(0, [newSection]);
+              const sectionMap: SectionData = new Y.Map<any>();
+              sectionMap.set("notes", new Y.Array<NoteData>());
+              sectionMap.set("name", new Y.Text("New section"));
+              board.push([sectionMap]);
             }}
             style={{
               minWidth: "13rem",
