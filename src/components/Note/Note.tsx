@@ -1,50 +1,90 @@
-import { Card } from "antd";
+import { Card, Input } from "antd";
 import { useEffect, useRef, useState } from "react";
-import { WebrtcProvider } from "y-webrtc";
 import * as Y from "yjs";
 
 import NoteEditor from "../NoteEditor/NoteEditor";
 import * as styles from "./Note.module.scss";
 
-// import { prop, provider, ydoc } from "../../store";
-
 export interface INoteOptions {
-  doc: Y.Doc;
+  map: Y.Map<any>;
 }
 
 export interface INoteProps {
-  title: string;
   options: INoteOptions;
 }
 
-const Note: React.FC<INoteProps> = ({ options, title }): JSX.Element => {
-  const [fragment, setFragment] = useState<Y.XmlFragment>();
+const Note: React.FC<INoteProps> = ({ options }): JSX.Element => {
+  console.group("Loading component Note");
 
-  const providerRef = useRef<WebrtcProvider>();
+  // const [fragment, setFragment] = useState<Y.XmlFragment>();
+  const [name, setName] = useState("");
+
+  const rootMapRef = useRef<Y.Map<any>>();
+  const fragmentRef = useRef<Y.XmlFragment>();
+  const titleTextRef = useRef<Y.Text>();
+
+  // const observeCallback = () => {
+  //   console.log("obs");
+  //   const frag = rootMapRef.current?.get("content") as Y.XmlFragment;
+  //   const newName = rootMapRef.current?.get("title") as Y.Text;
+  //   setName(newName.toString());
+  // };
+
+  // useEffect(() => {
+  //   // if (!docRef.current) docRef.current = options.doc;
+  //   // if (!providerRef.current) providerRef.current = new WebrtcProvider(docRef.current.guid, docRef.current);
+  //   // if (!rootMapRef.current) rootMapRef.current = docRef.current.getMap("rootMap");
+  //   if (!rootMapRef.current) rootMapRef.current = options.map;
+  // }, []);
 
   useEffect(() => {
-    if (!providerRef.current) providerRef.current = new WebrtcProvider(options.doc.guid, options.doc);
-    console.log(options.doc.guid);
-    const map = options.doc.getMap("rootMap");
+    console.log("Running Effect");
+    if (!rootMapRef.current) rootMapRef.current = options.map;
+    if (!fragmentRef.current) fragmentRef.current = rootMapRef.current.get("content") as Y.XmlFragment;
+    if (!titleTextRef.current) titleTextRef.current = rootMapRef.current.get("title") as Y.Text;
+    setName(titleTextRef.current?.toString() ?? "");
+    // const map = rootMapRef.current;
+    // console.log(map);
 
-    const observeCallback = () => {
-      const frag = map.get("content") as Y.XmlFragment;
-      console.log("obs");
-      setFragment(frag);
-    };
+    // if (map?.get("content")) {
+    //   setFragment(map?.get("content") as Y.XmlFragment);
+    // }
 
-    if (map.get("content")) setFragment(map.get("content") as Y.XmlFragment);
+    // if (map?.get("title")) {
+    //   setName((map?.get("title") as Y.Text).toString());
+    // }
 
-    map.observe(observeCallback);
+    // map?.observeDeep(observeCallback);
 
-    return () => {
-      observeCallback && map.unobserve(observeCallback);
-    };
+    // return () => {
+    //   observeCallback && map?.unobserveDeep(observeCallback);
+    // };
+
+    titleTextRef.current.observe((ev, tr) => {
+      setName(titleTextRef.current?.toString() ?? "");
+    });
   }, []);
 
+  // console.log(providerRef.current, fragment);
   return (
-    <Card title={title}>
-      {providerRef.current && fragment && <NoteEditor fragment={fragment} provider={providerRef.current} />}
+    <Card
+      title={
+        <>
+          <Input
+            // className={classes}
+            value={name}
+            onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+              titleTextRef.current?.delete(0, titleTextRef.current.length);
+              titleTextRef.current?.insert(0, e.target.value);
+              // setName(e.target.value);
+            }}
+            // disabled={!isEditMode}
+            bordered={false}
+          />
+        </>
+      }
+    >
+      {fragmentRef.current && <NoteEditor fragment={fragmentRef.current} />}
     </Card>
   );
 };
