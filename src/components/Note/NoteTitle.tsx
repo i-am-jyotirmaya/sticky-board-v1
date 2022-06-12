@@ -7,7 +7,6 @@ import * as Y from "yjs";
 import styles from "./Note.module.scss";
 
 const NoteTitle = ({ text }: { text: Y.Text }) => {
-  console.log("loading component Notetitle");
   const [name, setName] = useState("");
   const [isEditMode, setEditMode] = useState(false);
   const inputRef = useRef<InputRef>(null);

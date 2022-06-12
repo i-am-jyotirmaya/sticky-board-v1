@@ -1,17 +1,49 @@
 import { CheckOutlined, EditOutlined } from "@ant-design/icons";
-import { Button, Input, Tooltip } from "antd";
+import { Button, Input, InputRef, Tooltip } from "antd";
 import classNames from "classnames";
-import React from "react";
-import { useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
+import * as Y from "yjs";
 
 import styles from "./SectionHeader.module.scss";
 
-type SectionHeaderProps = React.HTMLAttributes<HTMLDivElement> & React.ClassAttributes<HTMLDivElement>;
+interface ISectionOptions {
+  text: Y.Text;
+}
+type SectionHeaderProps = React.HTMLAttributes<HTMLDivElement> &
+  React.ClassAttributes<HTMLDivElement> &
+  ISectionOptions;
 
 export const SectionHeader = React.forwardRef<HTMLDivElement, SectionHeaderProps>((props, ref) => {
   const [isEditMode, setEditMode] = useState(false);
   const [laneName, setLaneName] = useState("");
-  const [isNameSubmitting, setNameSubmitting] = useState(false);
+  const inputRef = useRef<InputRef>(null);
+
+  const { text } = props;
+
+  useEffect(() => {
+    setLaneName(text.toString());
+    text.observe((ev, tr) => {
+      setLaneName(text.toString());
+      if (tr.origin) flash();
+    });
+  }, []);
+
+  const handleSaveNameButtonClick = () => {
+    if (text.toString() !== inputRef.current?.input?.value) {
+      text?.delete(0, text.length);
+      text?.insert(0, inputRef.current?.input?.value ?? "");
+    }
+
+    setEditMode(false);
+  };
+
+  const flash = () => {
+    if (inputRef.current && inputRef.current.input) {
+      inputRef.current.input.animate([{ backgroundColor: "yellow" }, { backgroundColor: "transparent" }], {
+        duration: 300,
+      });
+    }
+  };
 
   const handleLaneNameOnChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setLaneName(e.target.value);
@@ -21,16 +53,6 @@ export const SectionHeader = React.forwardRef<HTMLDivElement, SectionHeaderProps
     setEditMode(true);
   };
 
-  const handleSaveNameButtonClick = () => {
-    setNameSubmitting(true);
-    // Save name
-    // Using timeout to emulate real behaviour
-    setTimeout(() => {
-      setEditMode(false);
-      setNameSubmitting(false);
-    }, 1000);
-  };
-
   const rootClasses = classNames(props.className, "bg-white rounded-lg shadow-md p-1");
   const classes = classNames("flex-1", styles.laneName, { [styles.editActive]: isEditMode });
 
@@ -38,6 +60,7 @@ export const SectionHeader = React.forwardRef<HTMLDivElement, SectionHeaderProps
     <div {...props} ref={ref} className={rootClasses}>
       <div className="flex">
         <Input
+          ref={inputRef}
           className={classes}
           value={laneName}
           onChange={handleLaneNameOnChange}
@@ -46,12 +69,7 @@ export const SectionHeader = React.forwardRef<HTMLDivElement, SectionHeaderProps
         />
         {isEditMode ? (
           <Tooltip title="">
-            <Button
-              type="text"
-              loading={isNameSubmitting}
-              icon={<CheckOutlined />}
-              onClick={handleSaveNameButtonClick}
-            />
+            <Button type="text" icon={<CheckOutlined />} onClick={handleSaveNameButtonClick} />
           </Tooltip>
         ) : (
           <Tooltip title="Edit Lane name">
