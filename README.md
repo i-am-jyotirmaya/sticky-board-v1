@@ -3,6 +3,7 @@
 ### Version
 
 Alpha
+[Live link](https://shiny-strudel-eea412.netlify.app/)
 
 ### About
 
