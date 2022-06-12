@@ -37,17 +37,18 @@ export const Section: React.FC<ISectionProps> = ({ sectionData }) => {
   }, [addNoteButtonRef.current]);
 
   const prepareNotesJsx = () => {
-    return sectionData.toArray().map((doc, index) => <Note key={index} options={{ doc }} title={`Note${index}`} />);
+    return sectionData.toArray().map((map, index) => <Note key={index} options={{ map }} />);
   };
 
   const handleAddNoteButton = () => {
-    const id = nanoid();
-    console.log("nid", id);
-    const doc = new Y.Doc({ autoLoad: true, guid: id });
-    const note = doc.getMap("rootMap");
-    note.set("title", "Note");
+    // const id = nanoid();
+    // console.log("nid", id);
+    // const doc = new Y.Doc({ autoLoad: true, guid: id });
+    // const note = doc.getMap("rootMap");
+    const note = new Y.Map();
+    note.set("title", new Y.Text("New Note"));
     note.set("content", new Y.XmlFragment());
-    sectionData.push([doc]);
+    sectionData.push([note]);
   };
 
   return (

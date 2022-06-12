@@ -58,7 +58,7 @@ export interface ICollaborativeBoardOptions {
   signaling?: string[];
 }
 
-export type NoteData = Y.Doc;
+export type NoteData = Y.Map<any>;
 export type SectionData = Y.Array<NoteData>;
 export type BoardData = Y.Array<SectionData>;
 

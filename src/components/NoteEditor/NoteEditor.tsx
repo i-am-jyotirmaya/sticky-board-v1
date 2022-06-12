@@ -4,17 +4,16 @@ import Placeholder from "@tiptap/extension-placeholder";
 import { EditorContent, useEditor } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
 import { useContext } from "react";
-import { WebrtcProvider } from "y-webrtc";
 import * as Y from "yjs";
 
 import { BoardContext } from "../../contexts/BoardContext";
 
 interface INoteEditorProps {
   fragment: Y.XmlFragment;
-  provider: WebrtcProvider;
 }
 
-const NoteEditor: React.FC<INoteEditorProps> = ({ fragment, provider }) => {
+const NoteEditor: React.FC<INoteEditorProps> = ({ fragment }) => {
+  const { provider } = useContext(BoardContext);
   const editor = useEditor({
     extensions: [
       StarterKit.configure({
