@@ -54,6 +54,7 @@ export const Section: React.FC<ISectionProps> = ({ sectionData }) => {
     const note = new Y.Map();
     note.set("title", new Y.Text("New Note"));
     note.set("content", new Y.XmlFragment());
+    note.set("color", new Y.Text("#FFFFFF"));
     notesArrRef.current!.push([note]);
   };
 
