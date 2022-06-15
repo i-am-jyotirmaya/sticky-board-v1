@@ -5,6 +5,7 @@ import * as Y from "yjs";
 import { NoteData } from "../../store";
 import NoteEditor from "../NoteEditor/NoteEditor";
 import * as styles from "./Note.module.scss";
+import NoteColorSelector from "./NoteColorSelector";
 import NoteTitle from "./NoteTitle";
 
 export interface INoteOptions {
@@ -16,60 +17,37 @@ export interface INoteProps {
 }
 
 const Note: React.FC<INoteProps> = ({ options }): JSX.Element => {
-  // console.group("Loading component Note");
-
-  // const [fragment, setFragment] = useState<Y.XmlFragment>();
   const [name, setName] = useState("");
+  const [bgColor, setBgColor] = useState("#FFFFFF");
 
   const rootMapRef = useRef<NoteData>();
   const fragmentRef = useRef<Y.XmlFragment>();
   const titleTextRef = useRef<Y.Text>();
-
-  // const observeCallback = () => {
-  //   console.log("obs");
-  //   const frag = rootMapRef.current?.get("content") as Y.XmlFragment;
-  //   const newName = rootMapRef.current?.get("title") as Y.Text;
-  //   setName(newName.toString());
-  // };
-
-  // useEffect(() => {
-  //   // if (!docRef.current) docRef.current = options.doc;
-  //   // if (!providerRef.current) providerRef.current = new WebrtcProvider(docRef.current.guid, docRef.current);
-  //   // if (!rootMapRef.current) rootMapRef.current = docRef.current.getMap("rootMap");
-  //   if (!rootMapRef.current) rootMapRef.current = options.map;
-  // }, []);
+  const colorTextRef = useRef<Y.Text>();
 
   useEffect(() => {
-    // console.log("Running Effect");
     if (!rootMapRef.current) rootMapRef.current = options.map;
     if (!fragmentRef.current) fragmentRef.current = rootMapRef.current.get("content") as Y.XmlFragment;
     if (!titleTextRef.current) titleTextRef.current = rootMapRef.current.get("title") as Y.Text;
+    if (!colorTextRef.current) colorTextRef.current = rootMapRef.current.get("color") as Y.Text;
     setName(titleTextRef.current?.toString() ?? "");
-    // const map = rootMapRef.current;
-    // console.log(map);
-
-    // if (map?.get("content")) {
-    //   setFragment(map?.get("content") as Y.XmlFragment);
-    // }
-
-    // if (map?.get("title")) {
-    //   setName((map?.get("title") as Y.Text).toString());
-    // }
-
-    // map?.observeDeep(observeCallback);
-
-    // return () => {
-    //   observeCallback && map?.unobserveDeep(observeCallback);
-    // };
-
-    // titleTextRef.current.observe((ev, tr) => {
-    //   setName(titleTextRef.current?.toString() ?? "");
-    // });
   }, []);
 
-  // console.log(providerRef.current, fragment);
   return (
-    <Card title={titleTextRef.current && <NoteTitle text={titleTextRef.current} />}>
+    <Card
+      title={titleTextRef.current && <NoteTitle text={titleTextRef.current} />}
+      extra={
+        colorTextRef.current && (
+          <NoteColorSelector
+            text={colorTextRef.current}
+            onColorChanged={(color) => {
+              setBgColor(color);
+            }}
+          />
+        )
+      }
+      style={{ backgroundColor: bgColor }}
+    >
       {fragmentRef.current && <NoteEditor fragment={fragmentRef.current} />}
     </Card>
   );

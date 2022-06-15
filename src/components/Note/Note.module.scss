@@ -10,3 +10,37 @@ input.noteTitle {
 input.noteTitle.editActive {
   font-weight: normal;
 }
+
+div.noteColorSelector {
+  .color {
+    width: 14px;
+    height: 14px;
+    // border-radius: 2px,
+  }
+
+  .swatch {
+    padding: 5px;
+    background: #fff;
+    // border-radius: 1px;
+    box-shadow: 0 0 0 1px rgba(0,0,0,.1);
+    display: inline-block;
+    cursor: pointer;
+  }
+
+  .container {
+    position: absolute;
+    right: 0;
+    z-index: 2;
+
+    .overlay {
+      position: fixed;
+      top: 0;
+      right: 0;
+      left: 0;
+      bottom: 0;
+    }
+  }
+}
+div.noteColorSelector, div.swatch, div.color {
+  border-radius: 100vh;
+}
