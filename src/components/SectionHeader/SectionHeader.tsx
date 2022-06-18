@@ -1,4 +1,4 @@
-import { CheckOutlined, EditOutlined } from "@ant-design/icons";
+import { CheckOutlined, CloseCircleFilled, EditOutlined, PlusCircleFilled, PlusOutlined } from "@ant-design/icons";
 import { Button, Input, InputRef, Tooltip } from "antd";
 import classNames from "classnames";
 import React, { useEffect, useRef, useState } from "react";
@@ -8,6 +8,8 @@ import styles from "./SectionHeader.module.scss";
 
 interface ISectionOptions {
   text: Y.Text;
+  onAddClick: VoidFunction;
+  onDeleteClick: VoidFunction;
 }
 type SectionHeaderProps = React.HTMLAttributes<HTMLDivElement> &
   React.ClassAttributes<HTMLDivElement> &
@@ -53,12 +55,12 @@ export const SectionHeader = React.forwardRef<HTMLDivElement, SectionHeaderProps
     setEditMode(true);
   };
 
-  const rootClasses = classNames(props.className, "bg-white rounded-lg shadow-md p-1");
+  const rootClasses = classNames(props.className);
   const classes = classNames("flex-1", styles.laneName, { [styles.editActive]: isEditMode });
 
   return (
     <div {...props} ref={ref} className={rootClasses}>
-      <div className="flex">
+      <div className="flex my-2 px-2">
         <Input
           ref={inputRef}
           className={classes}
@@ -72,10 +74,28 @@ export const SectionHeader = React.forwardRef<HTMLDivElement, SectionHeaderProps
             <Button type="text" icon={<CheckOutlined />} onClick={handleSaveNameButtonClick} />
           </Tooltip>
         ) : (
-          <Tooltip title="Edit Lane name">
+          <Tooltip title="Edit section name">
             <Button type="text" icon={<EditOutlined />} onClick={handleEditButtonClick} />
           </Tooltip>
         )}
+        <Tooltip title="Add a note">
+          <Button
+            type="text"
+            icon={<PlusCircleFilled />}
+            onClick={() => {
+              props.onAddClick();
+            }}
+          />
+        </Tooltip>
+        <Tooltip title="Delete section">
+          <Button
+            type="text"
+            icon={<CloseCircleFilled />}
+            onClick={() => {
+              props.onDeleteClick();
+            }}
+          />
+        </Tooltip>
       </div>
     </div>
   );

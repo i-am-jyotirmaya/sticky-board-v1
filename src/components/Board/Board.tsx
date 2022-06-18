@@ -1,6 +1,7 @@
 import "./Board.scss";
 
 import { PlusCircleFilled } from "@ant-design/icons";
+import { nanoid } from "nanoid";
 import SimpleBar from "simplebar-react";
 import * as Y from "yjs";
 
@@ -15,6 +16,10 @@ const Board = () => {
     roomId,
   });
 
+  const handleDeleteSection = (index: number) => {
+    board.delete(index, 1);
+  };
+
   return (
     <BoardContext.Provider value={{ board, roomId, provider, updateCount }}>
       <div className="bg-amber-200 px-4 py-2 m-auto w-full h-full rounded-lg flex flex-col">
@@ -25,6 +30,7 @@ const Board = () => {
               const sectionMap: SectionData = new Y.Map<any>();
               sectionMap.set("notes", new Y.Array<NoteData>());
               sectionMap.set("name", new Y.Text("New section"));
+              sectionMap.set("sectionId", nanoid());
               board.push([sectionMap]);
             }}
             style={{
@@ -37,7 +43,11 @@ const Board = () => {
           <div className="flex-grow max-h-full">
             <SimpleBar style={{ height: "100%", maxHeight: "100%" }}>
               {board.toArray().map((section, i) => (
-                <Section key={i} sectionData={section} />
+                <Section
+                  key={section.get("sectionId")}
+                  sectionData={section}
+                  deleteSection={() => handleDeleteSection(i)}
+                />
               ))}
             </SimpleBar>
           </div>
