@@ -1,14 +1,11 @@
 import "./Section.scss";
 
-import { PlusCircleFilled } from "@ant-design/icons";
 import { Modal } from "antd";
-import classNames from "classnames";
 import { useEffect, useRef, useState } from "react";
 import SimpleBar from "simplebar-react";
 import * as Y from "yjs";
 
 import { NoteData, SectionData } from "../../store";
-import { DashedButton } from "../Button/DashedButton";
 import Note from "../Note/Note";
 import { SectionHeader } from "../SectionHeader/SectionHeader";
 

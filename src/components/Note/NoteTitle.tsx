@@ -1,4 +1,4 @@
-import { CheckOutlined, EditOutlined } from "@ant-design/icons";
+import { CheckOutlined, EditFilled } from "@ant-design/icons";
 import { Button, Input, InputRef, Tooltip } from "antd";
 import classNames from "classnames";
 import { useEffect, useRef, useState } from "react";
@@ -58,37 +58,11 @@ const NoteTitle = ({ text }: { text: Y.Text }) => {
         </Tooltip>
       ) : (
         <Tooltip title="Edit Lane name">
-          <Button type="text" icon={<EditOutlined />} onClick={(e) => setEditMode(true)} />
+          <Button type="text" icon={<EditFilled />} onClick={(e) => setEditMode(true)} />
         </Tooltip>
       )}
     </div>
   );
 };
-
-/*
-<div className="flex">
-        <Input
-          className={classes}
-          value={laneName}
-          onChange={handleLaneNameOnChange}
-          disabled={!isEditMode}
-          bordered={false}
-        />
-        {isEditMode ? (
-          <Tooltip title="">
-            <Button
-              type="text"
-              loading={isNameSubmitting}
-              icon={<CheckOutlined />}
-              onClick={handleSaveNameButtonClick}
-            />
-          </Tooltip>
-        ) : (
-          <Tooltip title="Edit Lane name">
-            <Button type="text" icon={<EditOutlined />} onClick={handleEditButtonClick} />
-          </Tooltip>
-        )}
-      </div>
-*/
 
 export default NoteTitle;

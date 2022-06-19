@@ -1,4 +1,4 @@
-import { CheckOutlined, CloseCircleFilled, EditOutlined, PlusCircleFilled, PlusOutlined } from "@ant-design/icons";
+import { CheckOutlined, CloseCircleFilled, EditFilled, PlusCircleFilled } from "@ant-design/icons";
 import { Button, Input, InputRef, Tooltip } from "antd";
 import classNames from "classnames";
 import React, { useEffect, useLayoutEffect, useRef, useState } from "react";
@@ -82,7 +82,7 @@ export const SectionHeader = React.forwardRef<HTMLDivElement, SectionHeaderProps
             </Tooltip>
           ) : (
             <Tooltip title="Edit section name">
-              <Button type="text" icon={<EditOutlined />} onClick={handleEditButtonClick} />
+              <Button type="text" icon={<EditFilled />} onClick={handleEditButtonClick} />
             </Tooltip>
           )}
           <Tooltip title="Add a note">
