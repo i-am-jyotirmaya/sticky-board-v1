@@ -1,6 +1,7 @@
 import "./Section.scss";
 
 import { PlusCircleFilled } from "@ant-design/icons";
+import { Modal } from "antd";
 import classNames from "classnames";
 import { useEffect, useRef, useState } from "react";
 import SimpleBar from "simplebar-react";
@@ -62,6 +63,26 @@ export const Section: React.FC<ISectionProps> = ({ sectionData, deleteSection })
     notesArrRef.current!.push([note]);
   };
 
+  const handleDeleteButton = () => {
+    if (notesArrRef.current?.toArray().length) {
+      Modal.confirm({
+        title: "Confirm",
+        content: "This section is not empty. Do you want to delete?",
+        onOk() {
+          deleteSection();
+        },
+        okText: "Delete",
+        cancelText: "Cancel",
+        okButtonProps: {
+          danger: true,
+        },
+        maskClosable: true,
+      });
+    } else {
+      deleteSection();
+    }
+  };
+
   return (
     <div
       className="bg-slate-100 max-w-sm rounded-lg flex flex-col max-h-full border-2 border-slate-300"
@@ -74,9 +95,7 @@ export const Section: React.FC<ISectionProps> = ({ sectionData, deleteSection })
           onAddClick={() => {
             handleAddNoteButton();
           }}
-          onDeleteClick={() => {
-            deleteSection();
-          }}
+          onDeleteClick={handleDeleteButton}
         />
       )}
 
@@ -94,7 +113,9 @@ export const Section: React.FC<ISectionProps> = ({ sectionData, deleteSection })
             <SimpleBar style={{ height: "100%", maxHeight: "100%", marginTop: 8 }}>{prepareNotesJsx()}</SimpleBar>
           </div>
         ) : (
-          <p className="text-lg font-semibold text-slate-400 text-center pt-4 tracking-wider">NOTHING HERE</p>
+          <p className="text-lg font-semibold text-slate-400 text-center pt-4 tracking-wider pointer-events-none select-none">
+            NOTHING HERE
+          </p>
         )}
       </div>
     </div>
