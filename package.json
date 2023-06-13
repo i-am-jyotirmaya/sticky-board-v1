@@ -29,7 +29,7 @@
     "typescript": "^4.7.2",
     "web-vitals": "^2.1.4",
     "y-protocols": "^1.0.5",
-    "y-webrtc": "^10.2.3",
+    "y-webrtc": "^10.2.5",
     "yjs": "^13.6.2"
   },
   "scripts": {
